@@ -37,7 +37,8 @@ public class UrlService {
                 url.getShortCode(),
                 url.getOriginalUrl(),
                 baseUrl + "/" + url.getShortCode(),
-                url.getCreatedAt()
+                url.getCreatedAt(),
+                url.getExpiresAt()
             );
         }
 
@@ -63,7 +64,8 @@ public class UrlService {
             url.getShortCode(),
             url.getOriginalUrl(),
             baseUrl + "/" + url.getShortCode(),
-            url.getCreatedAt()
+            url.getCreatedAt(),
+            url.getExpiresAt()
         );
     }
 

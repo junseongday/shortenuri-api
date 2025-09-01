@@ -20,6 +20,14 @@ public class CreateUrlResponse {
         this.createdAt = createdAt;
     }
 
+    public CreateUrlResponse(String shortCode, String originalUrl, String shortUrl, LocalDateTime createdAt, LocalDateTime expiresAt) {
+        this.shortCode = shortCode;
+        this.originalUrl = originalUrl;
+        this.shortUrl = shortUrl;
+        this.createdAt = createdAt;
+        this.expiresAt = expiresAt;
+    }
+
     // Getters and Setters
     public String getShortCode() {
         return shortCode;
