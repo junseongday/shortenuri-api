@@ -1,0 +1,21 @@
+### Create a short URL
+@hostname = localhost
+@port = 8080
+@protocol = http
+@host = {{protocol}}://{{hostname}}:{{port}}
+
+POST {{host}}/api/urls
+Content-Type: application/json
+
+{
+  "originalUrl": "https://www.google.com"
+}
+> {% client.global.set("shortCode", response.body.shortCode); %}
+
+### Redirect to original URL
+# @name getUrl
+GET {{host}}/api/urls/redirect/{{shortCode}}
+
+### Get URL stats
+# @name getUrlStats
+GET {{host}}/api/urls/{{shortCode}}
