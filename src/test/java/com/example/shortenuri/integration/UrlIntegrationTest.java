@@ -305,4 +305,38 @@ class UrlIntegrationTest {
         assertEquals(response1.getShortCode(), response2.getShortCode());
         assertEquals(response1.getShortUrl(), response2.getShortUrl());
     }
+
+    @Test
+    void redirectFromRootPath_Integration_Success() throws Exception {
+        // Given - Create URL first
+        CreateUrlRequest createRequest = new CreateUrlRequest();
+        createRequest.setOriginalUrl("https://www.rootredirect.com");
+        createRequest.setCustomShortCode("root123");
+
+        String createResponseJson = mockMvc.perform(post("/api/urls")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createRequest)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        CreateUrlResponse createResponse = objectMapper.readValue(createResponseJson, CreateUrlResponse.class);
+
+        // When & Then - Redirect from root path
+        mockMvc.perform(get("/" + createResponse.getShortCode()))
+                .andExpect(status().is3xxRedirection());
+
+        // Verify click count is incremented
+        Url url = urlRepository.findByShortCode("root123").orElse(null);
+        assertNotNull(url);
+        assertEquals(1L, url.getClickCount());
+    }
+
+    @Test
+    void redirectFromRootPath_NonExistentCode_Integration_NotFound() throws Exception {
+        // When & Then
+        mockMvc.perform(get("/nonexistent"))
+                .andExpect(status().isNotFound());
+    }
 }
